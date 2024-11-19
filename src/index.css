@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "NewAmsterdam";
+    src: local(Story),
+    url('./assets/fonts/NewAmsterdam-Regular.ttf') format('truetype')
+}
