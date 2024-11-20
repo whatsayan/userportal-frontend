@@ -17,7 +17,7 @@ const InputField = ({
       className="w-full h-full rounded-full transition-all duration-300 bg-transparent pl-5 pr-10 outline-none text-sm md:text-base border-2 border-[#8697c4] font-extrabold peer focus:border-[#7091e6]"
       id={name}
       type={type}
-      aria-label={label}
+      // aria-label={label}
       required={required}
     />
     <label

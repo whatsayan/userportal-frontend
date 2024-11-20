@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import TaskDialog from "./TaskDialog";
-import AddUserForm from "./AddUserForm";
-import UpdateUserForm from "./UpdateUserForm";
-import ShowTask from "./ShowTask"; // Import the ShowTask component
+import TaskDialog from "../components/TaskDialog.jsx";
+import AddUserForm from "../components/AddUserForm.jsx";
+import UpdateUserForm from "../components/UpdateUserForm.jsx";
+import ShowTask from "../components/ShowTask.jsx";
 import { LuLogOut } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import UserCard from "../components/UserCard.jsx";
 
 const AdminDashboard = () => {
   const [showTaskDialog, setShowTaskDialog] = useState(false);
@@ -273,38 +274,42 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-900 text-gray-300 min-h-screen">
-      <header className="bg-gradient-to-b from-blue-900 to-blue-950 hover:bg-gradient-to-t p-6 rounded-lg shadow-md mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-blue-200">
-              Admin Dashboard
-            </h1>
-            <p className="text-lg text-blue-300">
-              Manage users and tasks efficiently
-            </p>
-          </div>
-          <div>
-            <img
-              className="h-40 transition-all duration-500 hover:rotate-[360deg] hover:scale-110"
-              src="https://imgs.search.brave.com/hGqcVhfGR2rNPkQMZkTsYaeXZRnK1RY6trw_FB3T1ZY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bWluaW9yYW5nZS5j/b20vaW1hZ2VzL2hl/YWRlci9wYW0ud2Vi/cA"
-              alt="User-management-system-logo"
-            />
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div>
-                <p className=" font-bold text-3xl">{loggedInUser.name}</p>
-                <p className=" text-md text-gray-300">
-                  @{loggedInUser.username}
-                </p>
-                <p className=" text-md text-gray-300">{loggedInUser.email}</p>
-                <p className=" text-md text-gray-300">{loggedInUser.city}</p>
-                <p className=" text-md text-gray-300">{loggedInUser.role}</p>
-              </div>
-              <div className="w-fit px-4 min-w-16 h-16 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white text-2xl">
-                {loggedInUser.name.split(" ").map((item) => item.charAt(0))}
-              </div>
+    <div className="p-2 pt-5 md:p-8 mb-10 bg-gray-900 text-gray-300 min-h-screen">
+      <header className="bg-gradient-to-b from-blue-900 to-blue-950 hover:bg-gradient-to-t p-2 md:p-6 rounded-lg shadow-md mb-6 gap-5 md:gap-0 flex items-center justify-between">
+        <div>
+          <h1 className=" md:text-4xl font-bold text-blue-200">
+            Admin Dashboard
+          </h1>
+          <p className=" text-sm md:text-lg text-blue-300">
+            Manage users and tasks efficiently
+          </p>
+        </div>
+        <div className="  ">
+          <img
+            className=" h-10 w-20 md:h-40 md:w-auto transition-all duration-500 hover:rotate-[360deg] hover:scale-110"
+            src="https://imgs.search.brave.com/hGqcVhfGR2rNPkQMZkTsYaeXZRnK1RY6trw_FB3T1ZY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bWluaW9yYW5nZS5j/b20vaW1hZ2VzL2hl/YWRlci9wYW0ud2Vi/cA"
+            alt="User-management-system-logo"
+          />
+        </div>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <div>
+              <p className=" font-bold md:text-3xl">{loggedInUser.name}</p>
+              <p className=" text-xs md:text-md text-gray-300">
+                @{loggedInUser.username}
+              </p>
+              <p className=" text-xs md:text-md text-gray-300">
+                {loggedInUser.email}
+              </p>
+              <p className=" text-xs md:text-md text-gray-300">
+                {loggedInUser.city}
+              </p>
+              <p className=" text-xs md:text-md text-gray-300">
+                {loggedInUser.role}
+              </p>
+            </div>
+            <div className="w-fit md:px-4 min-w-10 h-10 md:min-w-16 md:h-16 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white text-sm md:text-2xl">
+              {loggedInUser.name.split(" ").map((item) => item.charAt(0))}
             </div>
           </div>
         </div>
@@ -318,70 +323,23 @@ const AdminDashboard = () => {
         </button>
         <button
           onClick={handleLogout}
-          className="p-2 mr-5 bg-blue-600 hover:bg-blue-700 text-white rounded transition duration-300"
+          className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition duration-300"
         >
           <LuLogOut className="h-5 w-5 inline-block" />
           <span className={`ml-2 `}>Logout</span>
         </button>
       </div>
-      <table className="w-full text-left bg-gray-800 rounded-lg">
-        <thead>
-          <tr className="bg-gradient-to-r from-blue-950 to-blue-800 hover:bg-gradient-to-l">
-            <th className="p-4 border-b">Name</th>
-            <th className="p-4 border-b">Username</th>
-            <th className="p-4 border-b">Email</th>
-            <th className="p-4 border-b">City</th>
-            <th className="p-4 border-b">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="bg-gradient-to-r from-gray-700 to-gray-800">
-          {users.map((user) => (
-            <React.Fragment key={user.id}>
-              <tr className=" transition-all duration-500 hover:skew-x-12 hover:bg-gradient-to-r from-gray-950 to-gray-700 ">
-                <td className="p-4 border-b">{user.name}</td>
-                <td className="p-4 border-b">
-                  @{user.username || "mai nahi bataunga"}
-                </td>
-                <td className="p-4 border-b">{user.email}</td>
-                <td className="p-4 border-b">{user.city}</td>
-                <td className="p-4 border-b">
-                  <button
-                    className="py-1 px-3 mr-2 bg-yellow-700 rounded-lg hover:bg-yellow-800"
-                    onClick={() => handleUpdateUserClick(user)}
-                  >
-                    Update
-                  </button>
-                  <button className="py-1 px-3 mr-2 bg-red-700 rounded-lg hover:bg-red-800">
-                    Delete
-                  </button>
-                  <button
-                    className="py-1 px-3 mr-2 bg-green-700 rounded-lg hover:bg-green-800"
-                    onClick={() => setShowTaskDialog(true)}
-                  >
-                    Assign Task
-                  </button>
-                  <button
-                    className="py-1 px-3 bg-purple-700 rounded-lg hover:bg-purple-800"
-                    onClick={() => handleShowTasksClick(user)}
-                  >
-                    Show Tasks
-                  </button>
-                </td>
-              </tr>
-              {showTasksForUser && showTasksForUser.id === user.id && (
-                <tr className="">
-                  <td className="" colSpan="5">
-                    <ShowTask
-                      tasks={user.tasks}
-                      onClose={() => setShowTasksForUser(null)}
-                    />
-                  </td>
-                </tr>
-              )}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
+      <div className="w-full overflow-hidden flex flex-wrap justify-between gap-y-5">
+        {users.map((user, index) => (
+          <UserCard
+            key={index}
+            user={user}
+            handleUpdateUserClick={handleUpdateUserClick}
+            handleShowTasksClick={handleShowTasksClick}
+            setShowTaskDialog={setShowTaskDialog}
+          />
+        ))}
+      </div>
 
       {showTaskDialog && (
         <TaskDialog onClose={() => setShowTaskDialog(false)} />

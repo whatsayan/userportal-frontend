@@ -1,14 +1,31 @@
-import React from 'react'
-import Body from './components/Body'
-import { Toaster } from 'react-hot-toast'
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-const App = () => {
+import UserDashboard from "./pages/userDashboard";
+import AdminDashboard from "./pages/adminDashboard";
+import Login from "./pages/login";
+Login
+const browserRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <UserDashboard />,
+  },
+  {
+    path: "/adminDashboard",
+    element: <AdminDashboard />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+]);
+
+const Body = () => {
   return (
     <>
-      <Body/>
-      <Toaster/>
+      <RouterProvider router={browserRouter} />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default Body;
