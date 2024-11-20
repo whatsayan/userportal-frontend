@@ -73,10 +73,9 @@ const Login = () => {
           city,
           role,
         });
-        console.log(response);
-        
+        // console.log(response);     
         toast.success(response.data.message);
-        if (response.ok) handleClick();
+        handleClick();
       } catch (error) {
         toast.error(error?.response?.data?.message || "Internal Server Error");
       }
