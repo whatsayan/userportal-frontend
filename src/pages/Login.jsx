@@ -8,6 +8,8 @@ import InputField from "../components/InputField.jsx";
 import { MdAlternateEmail } from "react-icons/md";
 import { BASE_URL } from "../utils/constants";
 import RoleSelection from "../components/RoleSelection.jsx";
+import { useSignUp } from "../hooks/useSignup.jsx";
+import { useLogin } from "../hooks/useLogin.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ const Login = () => {
     city: "",
     role: "USER", // Default role
   });
+  const { signup, isLoading, error } = useSignUp();
+  const { login, isLoading: isLoadingLogin, error: errorLogin } = useLogin();
 
   const handleClick = () => setHaveAccount((prevVal) => !prevVal);
 
@@ -53,31 +57,23 @@ const Login = () => {
      
     if (haveAccount) {
       try {
-        const response = await axios.post(`${BASE_URL}/auth/login`, {
-          email,
-          password,
-        });
-        toast.success(response.data.message);
-        console.log("Logged in successfully");
-        role === "USER" ? navigate('/userDashboard') : navigate("/adminDashboard");
-        if (response.data.success) navigate("/");
-      } catch (error) {
-        toast.error(error?.response?.data?.message || "Internal Server Error");
+        login(email, password);      
+      } catch (err) {
+        toast.error(err?.response?.data?.message || error);
       }
     } else {
       try {
-        const response = await axios.post(`${BASE_URL}/auth/register`, {
-          name,
-          email,
-          password,
-          city,
-          role,
+        signup(name, email, password, city, role);
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          city: "",
+          role: "USER", // Default role
         });
-        // console.log(response);     
-        toast.success(response.data.message);
-        handleClick();
-      } catch (error) {
-        toast.error(error?.response?.data?.message || "Internal Server Error");
+        if(!isLoading && !error) handleClick();
+      } catch (err) {
+        toast.error(err?.response?.data?.message || error);
       }
     }
   };

@@ -1,19 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LuLogOut } from "react-icons/lu";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
   const [isLogoutButtonActive, setIsLogoutButtonActive] = useState(false);
-  const loggedInUser = {
-    id: 1,
-    name: "Aman Kumar",
-    username: "amazing_aman",
-    email: "aman@example.com",
-    city: "Delhi",
-    role: "User",
-  };
-  console.log(loggedInUser.name.split(" "));
+  const {user} = useAuthContext();
+  const { logout } = useLogout();
+  console.log(user);
+  const loggedInUser = user;
+  // const loggedInUser = {
+  //   id: 1,
+  //   name: "Aman Kumar",
+  //   username: "amazing_aman",
+  //   email: "aman@example.com",
+  //   city: "Delhi",
+  //   role: "User",
+  // };
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -65,7 +70,7 @@ const UserDashboard = () => {
   ]);
 
   const handleLogout = () => {
-    navigate("/login");
+    logout();
   };
 
   const handleStatusChange = (taskId, newStatus) => {
