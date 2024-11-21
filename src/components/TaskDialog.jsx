@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const TaskDialog = ({ onClose }) => {
   const [taskTitle, setTaskTitle] = useState("");
@@ -12,6 +13,7 @@ const TaskDialog = ({ onClose }) => {
       description: taskDescription,
       dueDate,
     });
+    toast.success("Task Assigned");
     onClose(); // Close the dialog after assigning the task
   };
 

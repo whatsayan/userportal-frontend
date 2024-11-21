@@ -21,7 +21,7 @@ const InputField = ({
       required={required}
     />
     <label
-      className="absolute left-5 transition-all text-[#3d52a0] font-bold duration-500 top-1/2 -translate-y-1/2 peer-focus:-top-3 peer-focus:text-[#7091e6] peer-valid:-top-3 peer-valid:text-[#7091e6]"
+      className="absolute left-5 uppercase transition-all text-[#3d52a0] font-bold duration-500 top-1/2 -translate-y-1/2 peer-focus:-top-3 peer-focus:text-[#7091e6] peer-valid:-top-3 peer-valid:text-[#7091e6]"
       htmlFor={name}
     >
       {label}

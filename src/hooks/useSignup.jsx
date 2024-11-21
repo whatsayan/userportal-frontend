@@ -1,36 +1,32 @@
 import { useState } from "react";
-import { useAuthContext } from "./useAuthContext";
-import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export const useSignUp = () => {
-    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { dispatch } = useAuthContext();
 
     const signup = async (name, email, password, city, role) => {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch(`${BASE_URL}/auth/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password, city, role })
+        const response = await axios.post(`${BASE_URL}/auth/register`, {
+          name,
+          email,
+          password,
+          city,
+          role,
         });
 
-        const json = await response.json();
-
-        if (!response.ok) {
+        if (response.status != 200) {
             setIsLoading(false);
-            setError(json.error);
+            setError(response.error || " Failed to Sign In ");
         }
 
-        if (response.ok) {
+        if (response.status == 200) {
+            toast.success(response.data.message);
             setIsLoading(false);
-            // Optional: Dispatch action to update auth state
-            // dispatch({ type: "SIGNUP", payload: json });
-            navigate("/login");
         }
     };
 
