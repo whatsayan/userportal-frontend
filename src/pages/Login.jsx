@@ -10,6 +10,8 @@ import { BASE_URL } from "../utils/constants";
 import RoleSelection from "../components/RoleSelection.jsx";
 import { useSignUp } from "../hooks/useSignup.jsx";
 import { useLogin } from "../hooks/useLogin.jsx";
+import ReactLoading from "react-loading";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -80,7 +82,15 @@ const Login = () => {
 
   return (
     <div className="h-screen w-screen font-NewAmsterdam font-bold tracking-widest bg-[#1c1c1c] flex items-center justify-center text-[#5c8eda]">
-      <div className="flex justify-center flex-col gap-5 md:block relative md:w-4/5 md:h-4/5 h-[90dvh] w-[95vw] rounded-xl border-2 border-[#3ec9b0] md:shadow-[0_0_25px_#4bd9c7] shadow-[inset_0_0_25px_#4bd9c7] overflow-hidden">
+      {isLoading || isLoadingLogin ? (
+        <ReactLoading
+          type="spinningBubbles"
+          color="cyan"
+          height={40}
+          width={40}
+        />
+      ) : (
+        <div className="flex justify-center flex-col gap-5 md:block relative md:w-4/5 md:h-4/5 h-[90dvh] w-[95vw] rounded-xl border-2 border-[#3ec9b0] md:shadow-[0_0_25px_#4bd9c7] shadow-[inset_0_0_25px_#4bd9c7] overflow-hidden">
         {/* Curved Shape */}
         {/* <div
           className={`hidden md:block curved-shape absolute -top-[5px] border-2 border-[#1eaedb] shadow-[0_0_25px_#1eaedb] w-screen h-screen bg-gradient-to-tr from-[#1e88e5] via-[#29b6f6] to-[#1e88e5] transition-all duration-[1.5s] ${
@@ -202,6 +212,9 @@ const Login = () => {
           </p>
         </div>
       </div>
+      )}
+
+      
     </div>
   );
 };

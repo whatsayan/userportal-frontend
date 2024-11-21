@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TaskDialog from "../components/TaskDialog.jsx";
 import AddUserForm from "../components/AddUserForm.jsx";
 import UpdateUserForm from "../components/UpdateUserForm.jsx";
-import ShowTask from "../components/ShowTask.jsx";
+// import ShowTask from "../components/ShowTask.jsx";
 import { LuLogOut } from "react-icons/lu";
 import UserCard from "../components/UserCard.jsx";
 import { useAuthContext } from "../hooks/useAuthContext.jsx";
@@ -13,6 +13,7 @@ import { useSignUp } from "../hooks/useSignup.jsx";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants.jsx";
 import toast from "react-hot-toast";
+import ReactLoading from "react-loading";
 const AdminDashboard = () => {
   const [showTaskDialog, setShowTaskDialog] = useState(false);
   const [showAddUserForm, setShowAddUserForm] = useState(false);
@@ -20,7 +21,8 @@ const AdminDashboard = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [refreshAllUsers, setRefreshAllUsers] = useState(false);
   const [showTasksForUser, setShowTasksForUser] = useState(null); // State for showing tasks
-  const {getAllUsers} = useGetAllUsers();
+  const { getAllUsers, isLoading, error } = useGetAllUsers();
+  const [loading, setLoading] = useState(false);
   const {logout} = useLogout();
   const { signup } = useSignUp()
   useEffect(() => {
@@ -57,6 +59,7 @@ const AdminDashboard = () => {
 
   const deleteUser = async (id) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.delete(`${BASE_URL}/admin/delete/${id}`,{
         headers: {Authorization: `Bearer ${token}`}
@@ -68,7 +71,9 @@ const AdminDashboard = () => {
     } catch (error) {
       toast.error(error.message);
       console.log(error);
-    }    
+    } finally{
+      setLoading(false);
+    }
   }
 
   return (
@@ -127,18 +132,30 @@ const AdminDashboard = () => {
           <span className={`ml-2 `}>Logout</span>
         </button>
       </div>
-      <div className="w-full overflow-hidden flex flex-wrap justify-between gap-y-5">
-        {users.map((user, index) => (
-          <UserCard
-            key={index}
-            user={user}
-            deleteUser={deleteUser}
-            handleUpdateUserClick={handleUpdateUserClick}
-            handleShowTasksClick={handleShowTasksClick}
-            setShowTaskDialog={setShowTaskDialog}
+
+      {isLoading || loading ? (
+        <div className=" flex items-center justify-center">
+          <ReactLoading
+            type="spinningBubbles"
+            color="cyan"
+            height={40}
+            width={40}
           />
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div className="w-full overflow-hidden flex flex-wrap justify-between gap-y-5">
+          {users.map((user, index) => (
+            <UserCard
+              key={index}
+              user={user}
+              deleteUser={deleteUser}
+              handleUpdateUserClick={handleUpdateUserClick}
+              handleShowTasksClick={handleShowTasksClick}
+              setShowTaskDialog={setShowTaskDialog}
+            />
+          ))}
+        </div>
+      )}
 
       {showTaskDialog && (
         <TaskDialog onClose={() => setShowTaskDialog(false)} />

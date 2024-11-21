@@ -9,7 +9,6 @@ export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
   const { getProfile } = useGetProfile();
 
   const login = async (email, password) => {
@@ -27,21 +26,28 @@ export const useLogin = () => {
 
         // Save token to localStorage
         localStorage.setItem("token", token);
-        toast.success(message);
-
-        // Fetch user profile and handle role-based navigation
+        
+        // Fetch user profile
         try {
           await getProfile(token);
           role === "USER" ? navigate("/") : navigate("/adminDashboard");
+          toast.success(message);
         } catch (profileError) {
+          console.error("Profile fetch error:", profileError);
           toast.error("Failed to fetch user profile. Try again later.");
         }
       } else {
-        throw new Error(response.data?.error || "Failed to log in.");
+        const errorMsg = response.data?.error || "Failed to log in.";
+        throw new Error(errorMsg);
       }
     } catch (err) {
-      setError(err.message || "An unknown error occurred.");
-      toast.error(err.message || "An unknown error occurred.");
+      const errorMessage =
+        err.response?.data?.error ||
+        err.message ||
+        "An unknown error occurred.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      console.error("Login error:", errorMessage);
     } finally {
       setIsLoading(false);
     }
