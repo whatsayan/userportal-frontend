@@ -7,24 +7,27 @@ export const useGetAllUsers = () => {
   const [error, setError] = useState(null);
   const { dispatch } = useUsersContext();
   const getAllUsers = async () => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${BASE_URL}/admin/get-all-users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = response.data.ourUsersList.map(({ name, username, city, email, role }) => ({
+      const data = response.data.ourUsersList.map(
+        ({ id, name, username, city, email, role }) => ({
+          id,
           name,
           username,
           city,
           email,
           role,
-        }));
-        // console.log(data);
+        })
+      );
+      // console.log(data);
       dispatch({
         type: "ALLUSERS",
         payload: data,
       });
-    //   console.log(response.data); // Log the actual data for better clarity
+      //   console.log(response.data); // Log the actual data for better clarity
     } catch (error) {
       console.error(
         "Error getting all users:",

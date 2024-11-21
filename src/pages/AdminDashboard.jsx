@@ -4,33 +4,33 @@ import AddUserForm from "../components/AddUserForm.jsx";
 import UpdateUserForm from "../components/UpdateUserForm.jsx";
 import ShowTask from "../components/ShowTask.jsx";
 import { LuLogOut } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
 import UserCard from "../components/UserCard.jsx";
 import { useAuthContext } from "../hooks/useAuthContext.jsx";
 import { useGetAllUsers } from "../hooks/useGetAllUsers.jsx";
 import { useUsersContext } from "../hooks/useUsersContext.jsx";
-import { users as usersss } from "../utils/constants.jsx";
 import { useLogout } from "../hooks/useLogout.jsx";
+import { useSignUp } from "../hooks/useSignup.jsx";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants.jsx";
+import toast from "react-hot-toast";
 const AdminDashboard = () => {
   const [showTaskDialog, setShowTaskDialog] = useState(false);
   const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [showUpdateUserForm, setShowUpdateUserForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [refreshAllUsers, setRefreshAllUsers] = useState(false);
   const [showTasksForUser, setShowTasksForUser] = useState(null); // State for showing tasks
-  const navigate = useNavigate();
   const {getAllUsers} = useGetAllUsers();
   const {logout} = useLogout();
+  const { signup } = useSignUp()
   useEffect(() => {
-    const getAllUsersFn = async () =>{
+    const getAllUsersFn = async () => {
       await getAllUsers();
-    }
+    };
     getAllUsersFn();
-  }, [])
+  }, [refreshAllUsers]);
 
   const {allusers} = useUsersContext();
-  console.log(allusers);
-  
-  // const users = allusers;
   const users = allusers;
   const {user} = useAuthContext();
   const loggedInUser = user;
@@ -54,6 +54,22 @@ const AdminDashboard = () => {
   const handleLogout = () => {
     logout();
   };
+
+  const deleteUser = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${BASE_URL}/admin/delete/${id}`,{
+        headers: {Authorization: `Bearer ${token}`}
+      });
+      if(response.status == 200){
+        toast.success(response.data.message);
+        setRefreshAllUsers(prev => !prev);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }    
+  }
 
   return (
     <div className="p-2 pt-5 md:p-8 mb-10 bg-gray-900 text-gray-300 min-h-screen">
@@ -116,6 +132,7 @@ const AdminDashboard = () => {
           <UserCard
             key={index}
             user={user}
+            deleteUser= {deleteUser}
             handleUpdateUserClick={handleUpdateUserClick}
             handleShowTasksClick={handleShowTasksClick}
             setShowTaskDialog={setShowTaskDialog}
@@ -128,7 +145,11 @@ const AdminDashboard = () => {
       )}
 
       {showAddUserForm && (
-        <AddUserForm onClose={() => setShowAddUserForm(false)} />
+        <AddUserForm
+          onClose={() => setShowAddUserForm(false)}
+          signup={signup}
+          setRefreshAllUsers={setRefreshAllUsers}
+        />
       )}
 
       {showUpdateUserForm && selectedUser && (

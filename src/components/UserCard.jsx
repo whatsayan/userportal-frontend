@@ -5,7 +5,9 @@ const UserCard = ({
   handleUpdateUserClick,
   handleShowTasksClick,
   setShowTaskDialog,
+  deleteUser
 }) => {
+  const loggedInUserId = JSON.parse(localStorage.getItem("loggedInUser")).id;
   return (
     <div className=" w-full md:w-[24%] bg-gray-800 p-2 md:p-6 rounded-lg shadow-lg text-white">
       <div className="flex justify-between items-center mb-4">
@@ -31,8 +33,11 @@ const UserCard = ({
             Update
           </button>
           <button
-            className="py-2 px-4 bg-red-700 rounded-lg hover:bg-red-800"
-            onClick={() => alert("Delete functionality not yet implemented")}
+            className={`py-2 px-4 bg-red-700 rounded-lg hover:bg-red-800 ${
+              user?.id == loggedInUserId ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            disabled={user?.id == loggedInUserId}
+            onClick={() => deleteUser(user.id)}
           >
             Delete
           </button>

@@ -11,10 +11,10 @@ export const useGetProfile = () => {
         const response = await axios.get(`${BASE_URL}/adminuser/get-profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const {name, username, email, city, role} = response.data.ourUsers;
+        const {id, name, username, email, city, role} = response.data.ourUsers;
         localStorage.setItem(
           "loggedInUser",
-          JSON.stringify({ name, username, email, city, role })
+          JSON.stringify({ id, name, username, email, city, role })
         );
         dispatch({type: "LOGIN", payload: {name, username, email, city, role}});
         console.log(response.data); // Log the actual data for better clarity

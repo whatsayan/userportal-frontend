@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 
-const AddUserForm = ({ onClose }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [role, setRole] = useState('user');
-  const [password, setPassword] = useState('');
+const AddUserForm = ({ onClose, signup, setRefreshAllUsers }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("user");
+  const [password, setPassword] = useState("");
+  const [city, setCity] = useState("");
 
-  const handleAddUser = () => {
+  const handleAddUser = async (e) => {
     // Logic to handle user creation
-    console.log({
-      name,
-      email,
-      role,
-      password
-    });
+    e.preventDefault();
+    await signup(name, email, password, city, role);
+    setRefreshAllUsers(prev => !prev);
     onClose(); // Close the form after adding the user
   };
 
@@ -42,17 +40,6 @@ const AddUserForm = ({ onClose }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-400">Role</label>
-          <select
-            className="w-full px-4 py-2 mt-2 bg-transparent border rounded-lg focus:outline-none text-gray-300"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-          >
-            <option className='bg-gray-900' value="user">User</option>
-            <option className='bg-gray-900' value="admin">Admin</option>
-          </select>
-        </div>
-        <div className="mb-4">
           <label className="block text-gray-400">Password</label>
           <input
             type="password"
@@ -61,6 +48,31 @@ const AddUserForm = ({ onClose }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-400">City</label>
+          <input
+            type="text"
+            className="w-full px-4 py-2 mt-2 bg-transparent border rounded-lg focus:outline-none text-gray-300"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-400">Role</label>
+          <select
+            className="w-full px-4 py-2 mt-2 bg-transparent border rounded-lg focus:outline-none text-gray-300"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option className="bg-gray-900" value="user">
+              User
+            </option>
+            <option className="bg-gray-900" value="admin">
+              Admin
+            </option>
+          </select>
         </div>
         <div className="flex justify-end space-x-4">
           <button
