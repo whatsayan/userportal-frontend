@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 
 const UserCard = ({
   user,
@@ -57,7 +58,8 @@ const UserCard = ({
           </button>
           <button
             className="py-2 px-4 bg-purple-700 rounded-lg hover:bg-purple-800"
-            onClick={() => handleShowTasksClick(user)}
+            // onClick={() => handleShowTasksClick(user)}
+            onClick={() => toast("This feature is currently under development.")}
           >
             Show Tasks
           </button>
