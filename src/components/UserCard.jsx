@@ -9,15 +9,21 @@ const UserCard = ({
 }) => {
   const loggedInUserId = JSON.parse(localStorage.getItem("loggedInUser")).id;
   return (
-    <div className=" w-full md:w-[24%] bg-gray-800 p-2 md:p-6 rounded-lg shadow-lg text-white">
+    <div className=" w-full md:w-[32%] bg-gray-800 p-2 md:p-6 rounded-lg shadow-lg text-white">
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-xl font-semibold">{user.name}</h2>
+          <h2 className="text-xl font-bold">{user.name}</h2>
           <p className="text-gray-400">
             @{user.username || "mai nahi bataunga"}
           </p>
         </div>
-        <div className="text-gray-400">{user.city}</div>
+        <div>
+          <span className="text-md tracking-tighter font-semibold">{user.city}</span>
+          <p className="text-gray-400">
+            {user.role || "mai nahi bataunga"}
+          </p>
+        </div>
+        
       </div>
       <div className="mb-4">
         <p>
