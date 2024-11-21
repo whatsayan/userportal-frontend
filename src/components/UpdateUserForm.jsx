@@ -1,20 +1,41 @@
 import React, { useState } from "react";
+import RoleSelection from "./RoleSelection";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
-const UpdateUserForm = ({ user, onClose }) => {
+const UpdateUserForm = ({ user, onClose, setRefreshAllUsers }) => {
   const [name, setName] = useState(user.name);
-  const [username, setUsername] = useState(user.username || ""); // Assuming username is optional in the original data
+  const [password, setPassword] = useState(user.password || ""); // Assuming password is optional in the original data
   const [email, setEmail] = useState(user.email);
+  const [role, setRole] = useState(user.role);
   const [city, setCity] = useState(user.city || ""); // Assuming city is optional in the original data
-
-  const handleUpdateUser = () => {
+  const handleUpdateUser = async (id) => {
     // Logic to handle updating user details
-    console.log({
-      id: user.id,
-      name,
-      username,
-      email,
-      city,
-    });
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Unauthorized to update!");
+      }
+      const response = await axios.put(
+        `${BASE_URL}/admin/update/${id}`,
+        {
+          name,
+          email,
+          password,
+          city,
+          role,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setRefreshAllUsers(prev => !prev)
+      toast.success(response.data.message);
+    } catch (err) {
+      toast.error(err.message);
+      console.log(err);
+    }
     onClose(); // Close the form after updating
   };
 
@@ -33,12 +54,12 @@ const UpdateUserForm = ({ user, onClose }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-400">Username</label>
+          <label className="block text-gray-400">Password</label>
           <input
-            type="text"
+            type="password"
             className="w-full px-4 py-2 mt-2 bg-transparent border rounded-lg focus:outline-none text-gray-300"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="mb-4">
@@ -60,6 +81,7 @@ const UpdateUserForm = ({ user, onClose }) => {
             onChange={(e) => setCity(e.target.value)}
           />
         </div>
+        <RoleSelection role={role} onChange={(e) => setRole(e.target.value)} />
         <div className="flex justify-end space-x-4">
           <button
             className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
@@ -69,7 +91,7 @@ const UpdateUserForm = ({ user, onClose }) => {
           </button>
           <button
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            onClick={handleUpdateUser}
+            onClick={() => handleUpdateUser(user.id)}
           >
             Update
           </button>

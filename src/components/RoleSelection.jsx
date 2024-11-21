@@ -8,7 +8,7 @@ const RoleSelection = ({ role, onChange }) => (
           type="radio"
           name="role"
           value="USER"
-          checked={role === "USER"}
+          checked={role === "USER" || role === "user" || role === "User"}
           onChange={onChange}
           className="form-radio text-[#7091e6] focus:ring-0 size-4"
         />
@@ -21,7 +21,7 @@ const RoleSelection = ({ role, onChange }) => (
           type="radio"
           name="role"
           value="ADMIN"
-          checked={role === "ADMIN"}
+          checked={role === "ADMIN" || role === "Admin" || role === "admin"}
           onChange={onChange}
           className="form-radio text-[#7091e6] focus:ring-0 size-4"
         />

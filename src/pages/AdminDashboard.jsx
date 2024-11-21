@@ -132,7 +132,7 @@ const AdminDashboard = () => {
           <UserCard
             key={index}
             user={user}
-            deleteUser= {deleteUser}
+            deleteUser={deleteUser}
             handleUpdateUserClick={handleUpdateUserClick}
             handleShowTasksClick={handleShowTasksClick}
             setShowTaskDialog={setShowTaskDialog}
@@ -156,6 +156,7 @@ const AdminDashboard = () => {
         <UpdateUserForm
           user={selectedUser}
           onClose={() => setShowUpdateUserForm(false)}
+          setRefreshAllUsers={setRefreshAllUsers}
         />
       )}
     </div>

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import RoleSelection from './RoleSelection';
 
 const AddUserForm = ({ onClose, signup, setRefreshAllUsers }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("USER");
   const [password, setPassword] = useState("");
   const [city, setCity] = useState("");
 
@@ -59,21 +60,10 @@ const AddUserForm = ({ onClose, signup, setRefreshAllUsers }) => {
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-400">Role</label>
-          <select
-            className="w-full px-4 py-2 mt-2 bg-transparent border rounded-lg focus:outline-none text-gray-300"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-          >
-            <option className="bg-gray-900" value="user">
-              User
-            </option>
-            <option className="bg-gray-900" value="admin">
-              Admin
-            </option>
-          </select>
-        </div>
+        <RoleSelection
+          role={role}
+          onChange={(e) => setRole(e.target.value)}
+        />
         <div className="flex justify-end space-x-4">
           <button
             className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
